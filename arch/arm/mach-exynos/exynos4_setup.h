@@ -440,6 +440,12 @@ struct mem_timings {
 #define APB_SFR_ARBRITATION_CONF_VAL	0x00000001
 #endif
 
+#ifdef TINY4412
+/* Interleave: 2Bit, Interleave_bit1: 0x15, Interleave_bit0: 0x7 */
+#define APB_SFR_INTERLEAVE_CONF_VAL	0x20001507
+#define APB_SFR_ARBRITATION_CONF_VAL	0x00000001
+#endif
+
 #define INTERLEAVE_ADDR_MAP_START_ADDR	0x40000000
 #define INTERLEAVE_ADDR_MAP_END_ADDR	0xbfffffff
 #define INTERLEAVE_ADDR_MAP_EN		0x00000001
