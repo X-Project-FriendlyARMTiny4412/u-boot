@@ -12,6 +12,10 @@
 
 #include <configs/exynos4-common.h>
 
+/* TIZEN THOR downloader support */
+#undef CONFIG_CMD_THOR_DOWNLOAD
+#undef CONFIG_USB_FUNCTION_THOR
+
 /* High Level Configuration Options */
 #define TINY4412			1	/* working with TINY4412*/
 
