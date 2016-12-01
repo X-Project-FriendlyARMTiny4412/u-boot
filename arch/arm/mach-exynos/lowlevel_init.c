@@ -215,11 +215,17 @@ int do_lowlevel_init(void)
 
 	if (actions & DO_CLOCKS) {
 		system_clock_init();
+
 #ifdef CONFIG_DEBUG_UART
 #if (defined(CONFIG_SPL_BUILD) && defined(CONFIG_SPL_SERIAL_SUPPORT)) || \
     !defined(CONFIG_SPL_BUILD)
+		#ifdef TINY4412
+		exynos_pinmux_config(PERIPH_ID_UART0, PINMUX_FLAG_NONE);
+		#else
 		exynos_pinmux_config(PERIPH_ID_UART3, PINMUX_FLAG_NONE);
+		#endif
 		debug_uart_init();
+		printascii("UART DEBUG enable .... !!!\n\r");
 #endif
 #endif
 		mem_ctrl_init(actions & DO_MEM_RESET);
