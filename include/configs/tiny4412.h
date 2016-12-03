@@ -3,6 +3,9 @@
  * 	Author AP0904225 <ap0904225@qq.com>
  *
  * Configuration settings for the FriendlyARM TINY4412 (EXYNOS4412) board.
+ *     FriendlyARM Tiny4412 SDK board hardware version:
+ *           core board   :  Tiny4412-1412
+ *           bottom board :  Tiny4412/Super4412SDK 1506
  *
  * SPDX-License-Identifier:	GPL-2.0+
  */
@@ -21,11 +24,11 @@
 
 #define CONFIG_SYS_DCACHE_OFF		1
 
-/* TINY4412 has 4 bank of DRAM */
-#define CONFIG_NR_DRAM_BANKS		4
+/* TINY4412-1412 core board has 8 bank of DRAM */
+#define CONFIG_NR_DRAM_BANKS		8
 #define CONFIG_SYS_SDRAM_BASE		0x40000000
 #define PHYS_SDRAM_1			CONFIG_SYS_SDRAM_BASE
-#define SDRAM_BANK_SIZE			(256 << 20)	/* 256 MB */
+#define SDRAM_BANK_SIZE			(128 << 20)	/* 128 MB */
 
 /* memtest works on */
 #define CONFIG_SYS_MEMTEST_START	CONFIG_SYS_SDRAM_BASE
