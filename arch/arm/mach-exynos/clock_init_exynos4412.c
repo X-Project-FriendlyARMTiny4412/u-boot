@@ -298,9 +298,9 @@ void system_clock_init(void)
 		 * DOUTmmc3 = MOUTmmc3 / (ratio + 1) = 100 (7)
 		 * sclk_mmc3 = DOUTmmc3 / (ratio + 1) = 50 (1)
 		 * DOUTmmc2 = MOUTmmc2 / (ratio + 1) = 100 (7)
-		 * sclk_mmc2 = DOUTmmc2 / (ratio + 1) = 50 (1)
+		 * sclk_mmc2 = DOUTmmc2 / (ratio + 1) = 20 (4)
 		*/
-	set = MMC2_RATIO(7) | MMC2_PRE_RATIO(1) | MMC3_RATIO(7) |
+	set = MMC2_RATIO(7) | MMC2_PRE_RATIO(4) | MMC3_RATIO(7) |
 			  MMC3_PRE_RATIO(1);
 
 	clrsetbits_le32(&clk->div_fsys2, clr, set);
