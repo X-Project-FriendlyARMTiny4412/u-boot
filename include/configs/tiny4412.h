@@ -1,5 +1,5 @@
 /*
- *			2016
+ *			2017
  * 	Author AP0904225 <ap0904225@qq.com>
  *
  * Configuration settings for the FriendlyARM TINY4412 (EXYNOS4412) board.
@@ -15,106 +15,67 @@
 
 #include <configs/exynos4-common.h>
 
-
-/* TIZEN THOR downloader support */
-#undef CONFIG_CMD_THOR_DOWNLOAD
-#undef CONFIG_USB_FUNCTION_THOR
-
-/* High Level Configuration Options */
 #define TINY4412			1	/* working with TINY4412*/
 
-#define CONFIG_SYS_DCACHE_OFF		1
+#define CONFIG_SYS_L2CACHE_OFF
+#ifndef CONFIG_SYS_L2CACHE_OFF
+#define CONFIG_SYS_L2_PL310
+#define CONFIG_SYS_PL310_BASE	0x10502000
+#endif
 
-/* TINY4412-1412 core board has 8 bank of DRAM */
-#define CONFIG_NR_DRAM_BANKS		8
-#define CONFIG_SYS_SDRAM_BASE		0x40000000
-#define PHYS_SDRAM_1			CONFIG_SYS_SDRAM_BASE
-#define SDRAM_BANK_SIZE			(128 << 20)	/* 128 MB */
+#define CONFIG_MACH_TYPE	4289
+
+#define CONFIG_NR_DRAM_BANKS	8	/* TINY4412-1412 core board has 8 bank of DRAM */
+#define CONFIG_SYS_SDRAM_BASE	0x40000000
+#define SDRAM_BANK_SIZE		(128 << 20)	/* 128 MB */
+#define PHYS_SDRAM_1		CONFIG_SYS_SDRAM_BASE
+/* Reserve the last 1 MiB for the secure firmware */
+#define CONFIG_SYS_MEM_TOP_HIDE		(1UL << 20UL)
+/* //#define CONFIG_TZSW_RESERVED_DRAM_SIZE	CONFIG_SYS_MEM_TOP_HIDE */
 
 /* memtest works on */
 #define CONFIG_SYS_MEMTEST_START	CONFIG_SYS_SDRAM_BASE
-#define CONFIG_SYS_MEMTEST_END		(CONFIG_SYS_SDRAM_BASE + 0x6000000)
+#define CONFIG_SYS_MEMTEST_END		(CONFIG_SYS_SDRAM_BASE + 0x5E00000)
 #define CONFIG_SYS_LOAD_ADDR		(CONFIG_SYS_SDRAM_BASE + 0x3E00000)
+#define CONFIG_SYS_TEXT_BASE		0x43e00000
 
-#define CONFIG_SYS_TEXT_BASE		0x43E00000
-#define CONFIG_SYS_INIT_SP_ADDR		(CONFIG_SYS_TEXT_BASE - 0x1000000)
-
-#define CONFIG_MACH_TYPE		MACH_TYPE_TINY4412
+#include <linux/sizes.h>
 
 /* select serial console configuration */
+/* //#define CONFIG_SERIAL1 */
 #define CONFIG_BAUDRATE			115200
 
 /* Console configuration */
+
+/* //#define CONFIG_BOOTARGS			"Please use defined boot" */
+#define CONFIG_BOOTCOMMAND		"run autoboot"
 #define CONFIG_DEFAULT_CONSOLE		"console=ttySAC0,115200n8\0"
 
-#define CONFIG_SYS_MEM_TOP_HIDE	(1 << 20)	/* ram console */
+#define CONFIG_SYS_INIT_SP_ADDR	(CONFIG_SYS_LOAD_ADDR \
+					- GENERATED_GBL_DATA_SIZE)
 
 #define CONFIG_SYS_MONITOR_BASE	0x00000000
 
-/* Power Down Modes */
-#define S5P_CHECK_SLEEP			0x00000BAD
-#define S5P_CHECK_DIDLE			0xBAD00000
-#define S5P_CHECK_LPA			0xABAD0000
+#define CONFIG_ENV_IS_IN_MMC
+#define CONFIG_SYS_MMC_ENV_DEV		CONFIG_MMC_DEFAULT_DEV
 
-#define CONFIG_SUPPORT_RAW_INITRD
+#define CONFIG_ENV_SIZE			(16 << 10)	/* 16 KB */
+#define RESERVE_BLOCK_SIZE		(512)
+#define BL1_SIZE			(8 << 10) /* 8K reserved for BL1*/
+#define BL2_SIZE			(16 << 10) /*16 K reserved for BL2/SPL*/
+#define CONFIG_ENV_OFFSET		(RESERVE_BLOCK_SIZE + BL1_SIZE + BL2_SIZE)
+#define CONFIG_SPL_LDSCRIPT	"board/samsung/common/exynos-uboot-spl.lds"
+#define CONFIG_SPL_MAX_FOOTPRINT	(14 * 1024)
 
 /* MMC SPL */
 #define COPY_BL2_FNPTR_ADDR	0x02020030
 #define CONFIG_SPL_TEXT_BASE	0x02023400
 #define CONFIG_SPL_STACK	0x02060000
 
-#define CONFIG_EXTRA_ENV_SETTINGS \
-	"loadaddr=0x40007000\0" \
-	"rdaddr=0x48000000\0" \
-	"kerneladdr=0x40007000\0" \
-	"ramdiskaddr=0x48000000\0" \
-	"console=ttySAC0,115200n8\0" \
-	"mmcdev=0\0" \
-	"bootenv=uEnv.txt\0" \
-	"loadbootenv=load mmc ${mmcdev} ${loadaddr} ${bootenv}\0" \
-	"importbootenv=echo Importing environment from mmc ...; " \
-		"env import -t $loadaddr $filesize\0" \
-        "loadbootscript=load mmc ${mmcdev} ${loadaddr} boot.scr\0" \
-        "bootscript=echo Running bootscript from mmc${mmcdev} ...; " \
-                "source ${loadaddr}\0"
-#define CONFIG_BOOTCOMMAND \
-	"if mmc rescan; then " \
-		"echo SD/MMC found on device ${mmcdev};" \
-		"if run loadbootenv; then " \
-			"echo Loaded environment from ${bootenv};" \
-			"run importbootenv;" \
-		"fi;" \
-		"if test -n $uenvcmd; then " \
-			"echo Running uenvcmd ...;" \
-			"run uenvcmd;" \
-		"fi;" \
-		"if run loadbootscript; then " \
-			"run bootscript; " \
-		"fi; " \
-	"fi;" \
-	"load mmc ${mmcdev} ${loadaddr} uImage; bootm ${loadaddr} "
-
-
-/* MIU (Memory Interleaving Unit) */
-#define CONFIG_MIU_2BIT_21_7_INTERLEAVED
-
-#define CONFIG_ENV_IS_IN_MMC
-#define CONFIG_SYS_MMC_ENV_DEV		0
-#define CONFIG_ENV_SIZE			(16 << 10)	/* 16 KB */
-#define RESERVE_BLOCK_SIZE		(512)
-#define BL1_SIZE			(8 << 10) /* 8K reserved for BL1*/
-#define BL2_SIZE			(16 << 10) /*16 K reserved for BL2/SPL*/
-#define CONFIG_ENV_OFFSET		(RESERVE_BLOCK_SIZE + BL1_SIZE + BL2_SIZE)
-
-#define CONFIG_SPL_LDSCRIPT	"board/samsung/common/exynos-uboot-spl.lds"
-#define CONFIG_SPL_MAX_FOOTPRINT	(14 * 1024)
-
-
 /* U-Boot copy size from SD/MMC to DRAM.*/
 #define COPY_BL2_SIZE		0x80000
 #define BL2_START_OFFSET	((CONFIG_ENV_OFFSET + CONFIG_ENV_SIZE)/512)
 #define BL2_SIZE_BLOC_COUNT	(COPY_BL2_SIZE/512)  /* u-boot size is 512K */
-
 /*
  *    SD/MMC(1 Block = 512B) layout:
  *    +------------+-------------------------------------------------------------------------------------------------+
@@ -128,6 +89,169 @@
  *
  */
 
+/* //#define CONFIG_ENV_OVERWRITE */
 
+/* Partitions name */
+#define PARTS_BOOT		"boot"
+#define PARTS_ROOT		"platform"
+
+
+#define CONFIG_DFU_ALT \
+	"uImage fat 0 1;" \
+	"zImage fat 0 1;" \
+	"Image.itb fat 0 1;" \
+	"uInitrd fat 0 1;" \
+	"exynos4412-odroidu3.dtb fat 0 1;" \
+	"exynos4412-odroidx2.dtb fat 0 1;" \
+	""PARTS_BOOT" part 0 1;" \
+	""PARTS_ROOT" part 0 2\0" \
+
+
+/* //#define CONFIG_SET_DFU_ALT_INFO */
+/* //#define CONFIG_SET_DFU_ALT_BUF_LEN	(SZ_1K) */
+
+/*
+#define CONFIG_DFU_ALT_BOOT_EMMC \
+	"u-boot raw 0x3e 0x800 mmcpart 1;" \
+	"bl1 raw 0x0 0x1e mmcpart 1;" \
+	"bl2 raw 0x1e 0x1d mmcpart 1;" \
+	"tzsw raw 0x83e 0x138 mmcpart 1\0"
+*/
+
+/*
+#define CONFIG_DFU_ALT_BOOT_SD \
+	"u-boot raw 0x3f 0x800;" \
+	"bl1 raw 0x1 0x1e;" \
+	"bl2 raw 0x1f 0x1d;" \
+	"tzsw raw 0x83f 0x138\0"
+*/
+
+/*
+ * Bootable media layout:
+ * dev:    SD   eMMC(part boot)
+ * BL1      1    0
+ * BL2     31   30
+ * UBOOT   63   62
+ * TZSW  2111 2110
+ * ENV   2560 2560(part user)
+ *
+ * MBR Primary partiions:
+ * Num Name   Size  Offset
+ * 1.  BOOT:  100MiB 2MiB
+ * 2.  ROOT:  -
+*/
+#define CONFIG_EXTRA_ENV_SETTINGS \
+	"loadbootscript=load mmc ${mmcbootdev}:${mmcbootpart} ${scriptaddr} " \
+		"boot.scr\0" \
+	"loadkernel=load mmc ${mmcbootdev}:${mmcbootpart} ${kerneladdr} " \
+		"${kernelname}\0" \
+	"loadinitrd=load mmc ${mmcbootdev}:${mmcbootpart} ${initrdaddr} " \
+		"${initrdname}\0" \
+	"loaddtb=load mmc ${mmcbootdev}:${mmcbootpart} ${fdtaddr} " \
+		"${fdtfile}\0" \
+	"check_ramdisk=" \
+		"if run loadinitrd; then " \
+			"setenv initrd_addr ${initrdaddr};" \
+		"else " \
+			"setenv initrd_addr -;" \
+		"fi;\0" \
+	"check_dtb=" \
+		"if run loaddtb; then " \
+			"setenv fdt_addr ${fdtaddr};" \
+		"else " \
+			"setenv fdt_addr;" \
+		"fi;\0" \
+	"kernel_args=" \
+		"setenv bootargs root=/dev/mmcblk${mmcrootdev}p${mmcrootpart}" \
+		" rootwait ${console} ${opts}\0" \
+	"boot_script=" \
+		"run loadbootscript;" \
+		"source ${scriptaddr}\0" \
+	"boot_fit=" \
+		"setenv kerneladdr 0x42000000;" \
+		"setenv kernelname Image.itb;" \
+		"run loadkernel;" \
+		"run kernel_args;" \
+		"bootm ${kerneladdr}#${boardname}\0" \
+	"boot_uimg=" \
+		"setenv kerneladdr 0x40007FC0;" \
+		"setenv kernelname uImage;" \
+		"run check_dtb;" \
+		"run check_ramdisk;" \
+		"run loadkernel;" \
+		"run kernel_args;" \
+		"bootm ${kerneladdr} ${initrd_addr} ${fdt_addr};\0" \
+	"boot_zimg=" \
+		"setenv kerneladdr 0x40007FC0;" \
+		"setenv kernelname zImage;" \
+		"run check_dtb;" \
+		"run check_ramdisk;" \
+		"run loadkernel;" \
+		"run kernel_args;" \
+		"bootz ${kerneladdr} ${initrd_addr} ${fdt_addr};\0" \
+	"autoboot=" \
+		"if test -e mmc 0 boot.scr; then; " \
+			"run boot_script; " \
+		"elif test -e mmc 0 Image.itb; then; " \
+			"run boot_fit;" \
+		"elif test -e mmc 0 zImage; then; " \
+			"run boot_zimg;" \
+		"elif test -e mmc 0 uImage; then; " \
+			"run boot_uimg;" \
+		"fi;\0" \
+	"console=" CONFIG_DEFAULT_CONSOLE \
+	"mmcbootdev=0\0" \
+	"mmcbootpart=1\0" \
+	"mmcrootdev=0\0" \
+	"mmcrootpart=2\0" \
+	"bootdelay=0\0" \
+	"dfu_alt_system="CONFIG_DFU_ALT \
+	"dfu_alt_info=Please reset the board\0" \
+	"consoleon=set console console=ttySAC1,115200n8; save; reset\0" \
+	"consoleoff=set console console=ram; save; reset\0" \
+	"initrdname=uInitrd\0" \
+	"initrdaddr=42000000\0" \
+	"scriptaddr=0x42000000\0" \
+	"fdtaddr=40800000\0"
+
+/* I2C */
+/* //#define CONFIG_SYS_I2C_S3C24X0 */
+/* //#define CONFIG_SYS_I2C_S3C24X0_SPEED	100000 */
+/* //#define CONFIG_SYS_I2C_S3C24X0_SLAVE	0  */
+
+/* GPT */
+/* //#define CONFIG_RANDOM_UUID */
+
+/* Security subsystem - enable hw_rand() */
+/* //#define CONFIG_EXYNOS_ACE_SHA */
+/* //#define CONFIG_LIB_HW_RAND */
+
+/* USB */
+/* //#define CONFIG_USB_EHCI */
+/* //#define CONFIG_USB_EHCI_EXYNOS */
+
+/* //#define CONFIG_SYS_USB_EHCI_MAX_ROOT_PORTS 3 */
+/* //#define CONFIG_USB_HOST_ETHER */
+/* //#define CONFIG_USB_ETHER_SMSC95XX */
+
+/*
+ * Supported Odroid boards: X3, U3
+ * TODO: Add Odroid X support
+ */
+/* //#define CONFIG_MISC_COMMON */
+/* //#define CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG */
+/* //#define CONFIG_BOARD_TYPES */
+/* //#define CONFIG_MISC_INIT_R */
+
+/* //#undef CONFIG_REVISION_TAG */
+
+/* Power Down Modes */
+#define S5P_CHECK_SLEEP			0x00000BAD
+#define S5P_CHECK_DIDLE			0xBAD00000
+#define S5P_CHECK_LPA			0xABAD0000
+
+/* TIZEN THOR downloader support */
+#undef CONFIG_CMD_THOR_DOWNLOAD
+#undef CONFIG_USB_FUNCTION_THOR
 
 #endif	/* __CONFIG_H */
