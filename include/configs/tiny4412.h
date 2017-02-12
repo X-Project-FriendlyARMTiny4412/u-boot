@@ -15,6 +15,7 @@
 
 #include <configs/exynos4-common.h>
 
+
 /* TIZEN THOR downloader support */
 #undef CONFIG_CMD_THOR_DOWNLOAD
 #undef CONFIG_USB_FUNCTION_THOR
@@ -41,11 +42,10 @@
 #define CONFIG_MACH_TYPE		MACH_TYPE_TINY4412
 
 /* select serial console configuration */
-#define CONFIG_SERIAL2
 #define CONFIG_BAUDRATE			115200
 
 /* Console configuration */
-#define CONFIG_DEFAULT_CONSOLE		"console=ttySAC1,115200n8\0"
+#define CONFIG_DEFAULT_CONSOLE		"console=ttySAC0,115200n8\0"
 
 #define CONFIG_SYS_MEM_TOP_HIDE	(1 << 20)	/* ram console */
 
@@ -68,7 +68,7 @@
 	"rdaddr=0x48000000\0" \
 	"kerneladdr=0x40007000\0" \
 	"ramdiskaddr=0x48000000\0" \
-	"console=ttySAC2,115200n8\0" \
+	"console=ttySAC0,115200n8\0" \
 	"mmcdev=0\0" \
 	"bootenv=uEnv.txt\0" \
 	"loadbootenv=load mmc ${mmcdev} ${loadaddr} ${bootenv}\0" \
