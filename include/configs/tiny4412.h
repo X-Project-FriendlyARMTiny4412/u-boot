@@ -60,9 +60,6 @@
 
 #define CONFIG_ENV_IS_IN_MMC
 #define CONFIG_SYS_MMC_ENV_DEV		CONFIG_MMC_DEFAULT_DEV
-#define CONFIG_ENV_SIZE			4096
-#define CONFIG_ENV_OFFSET		(SZ_1K * 1280) /* 1.25 MiB offset */
-#define CONFIG_ENV_OVERWRITE
 
 /* Power Down Modes */
 #define S5P_CHECK_SLEEP			0x00000BAD
@@ -102,24 +99,44 @@
  * Bootable media layout:
  * dev:    SD   eMMC(part boot)
  * BL1      1    0
- * BL2     31   30
- * UBOOT   63   62
- * TZSW  2111 2110
- * ENV   2560 2560(part user)
+ * BL2     17   16
+ * ENV     49   48
+ * UBOOT   81   80
+ * TZSW
+
  *
  * MBR Primary partiions:
  * Num Name   Size  Offset
  * 1.  BOOT:  100MiB 2MiB
  * 2.  ROOT:  -
 */
+/*  Bootable media layout:
+ *    SD/MMC(1 Block = 512B) layout:
+ *    +------------+-------------------------------------------------------------------------------------------------+
+ *    |                                                                             |
+ *    |            |                    |                     |                     |                      |
+ *    |   512B     |   8K(bl1)          |   16k(bl2/spl)      |   16k(ENV)          |  512k(u-boot)        |
+ *    |            |                    |                     |                     |                      |
+ *    |                                                                             |
+ *    <- Block0  ->-<- Block1~Block16 ->-<- Block17~Block48 ->-<- Block49~Block80 ->-<- Block81~Block1073 ->----------+
+ *
+ *
+ */
 #define COPY_BL2_FNPTR_ADDR	0x02020030
 #define CONFIG_SPL_TEXT_BASE	0x02023400
 #define CONFIG_SPL_STACK	0x02060000
+#define CONFIG_ENV_SIZE			(16 << 10)	/* 16 KB */
+#define RESERVE_BLOCK_SIZE		(512)
+#define BL1_SIZE			(8 << 10) /* 8K reserved for BL1*/
+#define BL2_SIZE			(16 << 10) /*16 K reserved for BL2/SPL*/
+#define CONFIG_ENV_OFFSET		(RESERVE_BLOCK_SIZE + BL1_SIZE + BL2_SIZE)
+
 #define CONFIG_SPL_LDSCRIPT	"board/samsung/common/exynos-uboot-spl.lds"
 #define CONFIG_SPL_MAX_FOOTPRINT	(14 * 1024)
 
-#define COPY_BL2_SIZE		0x80000 /*512k*/
-#define BL2_START_OFFSET	63
+/* U-Boot copy size from boot Media to DRAM.*/
+#define COPY_BL2_SIZE		0x80000
+#define BL2_START_OFFSET	((CONFIG_ENV_OFFSET + CONFIG_ENV_SIZE)/512)
 #define BL2_SIZE_BLOC_COUNT	(COPY_BL2_SIZE/512)  /* u-boot size is 512K */
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
