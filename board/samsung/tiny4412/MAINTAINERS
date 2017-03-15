@@ -1,0 +1,6 @@
+TINY4412 BOARD
+M:	Modified by AP0904225 <ap0904225@qq.com>  on the basis of odroid board
+S:
+F:	board/samsung/tiny4412/
+F:	include/configs/tiny4412.h
+F:	configs/tiny4412_defconfig
