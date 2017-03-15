@@ -23,6 +23,10 @@
 
 #define CONFIG_MACH_TYPE	4289
 
+#define CONFIG_CLK_1000_400_200
+#define APB_SFR_INTERLEAVE_CONF_VAL	0x20001507
+#define APB_SFR_ARBRITATION_CONF_VAL	0x00000001
+
 #define CONFIG_NR_DRAM_BANKS	8
 #define CONFIG_SYS_SDRAM_BASE	0x40000000
 #define SDRAM_BANK_SIZE		(256 << 20)	/* 256 MB */
@@ -59,6 +63,11 @@
 #define CONFIG_ENV_SIZE			4096
 #define CONFIG_ENV_OFFSET		(SZ_1K * 1280) /* 1.25 MiB offset */
 #define CONFIG_ENV_OVERWRITE
+
+/* Power Down Modes */
+#define S5P_CHECK_SLEEP			0x00000BAD
+#define S5P_CHECK_DIDLE			0xBAD00000
+#define S5P_CHECK_LPA			0xABAD0000
 
 /* Partitions name */
 #define PARTS_BOOT		"boot"
@@ -103,6 +112,16 @@
  * 1.  BOOT:  100MiB 2MiB
  * 2.  ROOT:  -
 */
+#define COPY_BL2_FNPTR_ADDR	0x02020030
+#define CONFIG_SPL_TEXT_BASE	0x02023400
+#define CONFIG_SPL_STACK	0x02060000
+#define CONFIG_SPL_LDSCRIPT	"board/samsung/common/exynos-uboot-spl.lds"
+#define CONFIG_SPL_MAX_FOOTPRINT	(14 * 1024)
+
+#define COPY_BL2_SIZE		0x80000 /*512k*/
+#define BL2_START_OFFSET	63
+#define BL2_SIZE_BLOC_COUNT	(COPY_BL2_SIZE/512)  /* u-boot size is 512K */
+
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	"loadbootscript=load mmc ${mmcbootdev}:${mmcbootpart} ${scriptaddr} " \
 		"boot.scr\0" \

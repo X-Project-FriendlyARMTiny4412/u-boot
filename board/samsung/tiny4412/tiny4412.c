@@ -442,6 +442,7 @@ int exynos_power_init(void)
 #ifdef CONFIG_USB_GADGET
 static int s5pc210_phy_control(int on)
 {
+/*
 	struct udevice *dev;
 	int ret;
 
@@ -455,6 +456,8 @@ static int s5pc210_phy_control(int on)
 		return regulator_set_mode(dev, OPMODE_ON);
 	else
 		return regulator_set_mode(dev, OPMODE_LPM);
+*/
+	return 0;
 }
 
 struct dwc2_plat_otg_data s5pc210_otg_data = {
@@ -471,6 +474,7 @@ struct dwc2_plat_otg_data s5pc210_otg_data = {
 int board_usb_init(int index, enum usb_init_type init)
 {
 #ifdef CONFIG_CMD_USB
+#if 0
 	struct udevice *dev;
 	int ret;
 
@@ -513,6 +517,7 @@ int board_usb_init(int index, enum usb_init_type init)
 		error("Regulator %s value setting error: %d", dev->name, ret);
 		return ret;
 	}
+#endif
 #endif
 	debug("USB_udc_probe\n");
 	return dwc2_udc_probe(&s5pc210_otg_data);

@@ -60,7 +60,8 @@ config TARGET_ODROID
 	bool "Exynos4412 Odroid board"
 
 config TARGET_TINY4412
-	bool "Exynos4412 Tiny4412 board"
+	bool "Exynos4412 FriendlyARM Tiny4412 board"
+	select SUPPORT_SPL
 
 endchoice
 endif
