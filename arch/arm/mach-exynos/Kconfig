@@ -62,6 +62,11 @@ config TARGET_ODROID
 config TARGET_TINY4412
 	bool "Exynos4412 FriendlyARM Tiny4412 board"
 	select SUPPORT_SPL
+	select SPL
+	select EXYNOS4412
+		help
+		Support FriendlyARM Tiny4412 board based on Samsung exynos4412
+		CPU: S5PC220[Samsung SOC on SMP Platform Base on ARM CortexA9].
 
 endchoice
 endif
