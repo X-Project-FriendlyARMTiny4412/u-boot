@@ -14,7 +14,7 @@
 #define __CONFIG_TINY4412_H
 
 #include <configs/exynos4-common.h>
-
+/*#define DEBUG*/
 #define TINY4412 1
 
 #define CONFIG_SYS_L2CACHE_OFF
@@ -54,7 +54,7 @@
 
 #define CONFIG_BOOTARGS			"Please use defined boot"
 #define CONFIG_BOOTCOMMAND		"run autoboot"
-#define CONFIG_DEFAULT_CONSOLE		"console=ttySAC1,115200n8\0"
+#define CONFIG_DEFAULT_CONSOLE		"console=ttySAC0,115200n8\0"
 
 #define CONFIG_SYS_INIT_SP_ADDR	(CONFIG_SYS_LOAD_ADDR \
 					- GENERATED_GBL_DATA_SIZE)

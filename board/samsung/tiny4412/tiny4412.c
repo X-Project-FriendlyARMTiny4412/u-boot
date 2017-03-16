@@ -40,6 +40,7 @@ enum {
 
 void set_board_type(void)
 {
+#if 0
 	/* Set GPA1 pin 1 to HI - enable XCL205 output */
 	writel(XCL205_EN_GPIO_CON_CFG, XCL205_EN_GPIO_CON);
 	writel(XCL205_EN_GPIO_DAT_CFG, XCL205_EN_GPIO_CON + 0x4);
@@ -58,6 +59,7 @@ void set_board_type(void)
 		gd->board_type = ODROID_TYPE_X2;
 	else
 		gd->board_type = ODROID_TYPE_U3;
+#endif
 }
 
 const char *get_board_type(void)
@@ -98,6 +100,7 @@ char *get_dfu_alt_boot(char *interface, char *devstr)
 
 static void board_clock_init(void)
 {
+#if 0
 	unsigned int set, clr, clr_src_cpu, clr_pll_con0, clr_src_dmc;
 	struct exynos4x12_clock *clk = (struct exynos4x12_clock *)
 						samsung_get_base_clock();
@@ -359,12 +362,13 @@ static void board_clock_init(void)
 	/* Wait for divider ready status */
 	while (readl(&clk->div_stat_fsys3) & DIV_STAT_FSYS3_CHANGING)
 		continue;
-
+#endif
 	return;
 }
 
 static void board_gpio_init(void)
 {
+#if 0
 	/* eMMC Reset Pin */
 	gpio_request(EXYNOS4X12_GPIO_K12, "eMMC Reset");
 
@@ -407,6 +411,7 @@ static void board_gpio_init(void)
 
 	/* USB3503A Reset */
 	gpio_request(EXYNOS4X12_GPIO_X35, "USB3503A Reset");
+#endif
 #endif
 }
 
