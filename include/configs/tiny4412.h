@@ -29,9 +29,10 @@
 #define APB_SFR_INTERLEAVE_CONF_VAL	0x20001507
 #define APB_SFR_ARBRITATION_CONF_VAL	0x00000001
 
+/* TINY4412-1412 core board has 8 bank of DRAM */
 #define CONFIG_NR_DRAM_BANKS	8
 #define CONFIG_SYS_SDRAM_BASE	0x40000000
-#define SDRAM_BANK_SIZE		(256 << 20)	/* 256 MB */
+#define SDRAM_BANK_SIZE		(128 << 20)	/* 128 MB */
 #define PHYS_SDRAM_1		CONFIG_SYS_SDRAM_BASE
 /* Reserve the last 1 MiB for the secure firmware */
 #define CONFIG_SYS_MEM_TOP_HIDE		(1UL << 20UL)
