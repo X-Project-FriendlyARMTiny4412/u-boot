@@ -14,7 +14,9 @@
 #define __CONFIG_TINY4412_H
 
 #include <configs/exynos4-common.h>
+
 /*#define DEBUG*/
+
 #define TINY4412 1
 
 #define CONFIG_SYS_L2CACHE_OFF
@@ -118,10 +120,10 @@
  *    +------------+-------------------------------------------------------------------------------------------------+
  *    |                                                                             |
  *    |            |                    |                     |                     |                      |
- *    |   512B     |   8K(bl1)          |   16k(bl2/spl)      |   16k(ENV)          |  512k(u-boot)        |
+ *    |   512B     |   8K(bl1)          |   16k(bl2/spl)      |   16k(ENV)          |  600k(u-boot)        |
  *    |            |                    |                     |                     |                      |
  *    |                                                                             |
- *    <- Block0  ->-<- Block1~Block16 ->-<- Block17~Block48 ->-<- Block49~Block80 ->-<- Block81~Block1073 ->----------+
+ *    <- Block0  ->-<- Block1~Block16 ->-<- Block17~Block48 ->-<- Block49~Block80 ->-<- Block81~Block1281 ->----------+
  *
  *
  */
@@ -138,7 +140,7 @@
 #define CONFIG_SPL_MAX_FOOTPRINT	(14 * 1024)
 
 /* U-Boot copy size from boot Media to DRAM.*/
-#define COPY_BL2_SIZE		0x80000
+#define COPY_BL2_SIZE		0x96000  /*600K*/
 #define BL2_START_OFFSET	((CONFIG_ENV_OFFSET + CONFIG_ENV_SIZE)/512)
 #define BL2_SIZE_BLOC_COUNT	(COPY_BL2_SIZE/512)  /* u-boot size is 512K */
 
@@ -217,9 +219,9 @@
 	"fdtaddr=40800000\0"
 
 /* I2C */
-#define CONFIG_SYS_I2C_S3C24X0
-#define CONFIG_SYS_I2C_S3C24X0_SPEED	100000
-#define CONFIG_SYS_I2C_S3C24X0_SLAVE	0
+/*#define CONFIG_SYS_I2C_S3C24X0 */
+/*#define CONFIG_SYS_I2C_S3C24X0_SPEED	100000*/
+/*#define CONFIG_SYS_I2C_S3C24X0_SLAVE	0 */
 
 /* GPT */
 #define CONFIG_RANDOM_UUID
