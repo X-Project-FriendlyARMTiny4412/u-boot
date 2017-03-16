@@ -15,6 +15,8 @@
 
 #include <configs/exynos4-common.h>
 
+#define TINY4412 1
+
 #define CONFIG_SYS_L2CACHE_OFF
 #ifndef CONFIG_SYS_L2CACHE_OFF
 #define CONFIG_SYS_L2_PL310
