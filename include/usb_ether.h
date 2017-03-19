@@ -132,6 +132,12 @@ int smsc95xx_eth_probe(struct usb_device *dev, unsigned int ifnum,
 int smsc95xx_eth_get_info(struct usb_device *dev, struct ueth_data *ss,
 			struct eth_device *eth);
 
+void dm9601_eth_before_probe(void);
+int dm9601_eth_probe(struct usb_device *dev, unsigned int ifnum,
+						struct ueth_data *ss);
+int dm9601_eth_get_info(struct usb_device *dev, struct ueth_data *ss,
+						struct eth_device *eth);
+
 void r8152_eth_before_probe(void);
 int r8152_eth_probe(struct usb_device *dev, unsigned int ifnum,
 		    struct ueth_data *ss);

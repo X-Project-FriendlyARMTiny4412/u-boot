@@ -413,6 +413,14 @@ static void board_gpio_init(void)
 	gpio_request(EXYNOS4X12_GPIO_X35, "USB3503A Reset");
 #endif
 #endif
+
+#ifdef CONFIG_CMD_USB
+
+	/* USB4604 Reset */
+	gpio_request(EXYNOS4X12_GPIO_M24, "USB4604 Reset");
+
+#endif
+
 }
 
 int exynos_early_init_f(void)
@@ -479,6 +487,10 @@ struct dwc2_plat_otg_data s5pc210_otg_data = {
 int board_usb_init(int index, enum usb_init_type init)
 {
 #ifdef CONFIG_CMD_USB
+
+	/* Reset*/
+	gpio_direction_output(EXYNOS4X12_GPIO_M24, 0);
+	gpio_direction_output(EXYNOS4X12_GPIO_M24, 1);
 #if 0
 	struct udevice *dev;
 	int ret;

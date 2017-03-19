@@ -15,7 +15,7 @@
 
 #include <configs/exynos4-common.h>
 
-/*#define DEBUG*/
+/* #define DEBUG */
 
 #define TINY4412 1
 
@@ -227,8 +227,8 @@
 #define CONFIG_RANDOM_UUID
 
 /* Security subsystem - enable hw_rand() */
-#define CONFIG_EXYNOS_ACE_SHA
-#define CONFIG_LIB_HW_RAND
+/*#define CONFIG_EXYNOS_ACE_SHA*/
+/*#define CONFIG_LIB_HW_RAND*/
 
 /* USB */
 #define CONFIG_USB_EHCI
@@ -236,7 +236,9 @@
 
 #define CONFIG_SYS_USB_EHCI_MAX_ROOT_PORTS	3
 #define CONFIG_USB_HOST_ETHER
-#define CONFIG_USB_ETHER_SMSC95XX
+/*#define CONFIG_USB_ETHER_SMSC95XX*/
+/* #define CONFIG_USB_ETHER_DM9621 */
+
 
 /*
  * Supported Odroid boards: X3, U3

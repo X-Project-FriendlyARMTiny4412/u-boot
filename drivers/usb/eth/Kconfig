@@ -1,0 +1,9 @@
+#
+# USB ETHERNET Drivers
+#
+comment "USB ETHERNET Drivers"
+
+config USB_ETHER_DM9601
+	bool "DM9601 device driver"
+	help
+	  Say Y or if your system has a DM9601 device.
