@@ -8,7 +8,7 @@
  * kind, whether express or implied.
  */
 
-#define DEBUG
+/* #define DEBUG */
 
 #if 0
 #include <linux/module.h>
@@ -622,7 +622,7 @@ static int dm9601_recv(struct eth_device *eth)
 		 * First byte contains packet status.
 		 */
 		if (actual_len < sizeof(status)) {
-			printf("Rx: incomplete packet length (status)\n");
+			debug("Rx: incomplete packet length (status)\n");
 			return -1;
 		}
 		status = buf_ptr[0];
@@ -646,7 +646,7 @@ static int dm9601_recv(struct eth_device *eth)
 		 * Extract the length of the data.
 		 */
 		if (actual_len < sizeof(packet_len)) {
-			printf("Rx: incomplete packet length (size)\n");
+			debug("Rx: incomplete packet length (size)\n");
 			return -1;
 		}
 		memcpy(&packet_len, buf_ptr, sizeof(packet_len));
